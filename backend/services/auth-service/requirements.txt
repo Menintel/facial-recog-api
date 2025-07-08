@@ -1,0 +1,8 @@
+fastapi
+uvicorn[standard]
+pydantic-settings # For Pydantic v2 settings
+passlib[bcrypt] # For password hashing
+python-jose[cryptography] # For JWT
+SQLAlchemy
+psycopg2-binary # PostgreSQL driver
+alembic # For database migrations
