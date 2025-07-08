@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:13-alpine
+    restart: always
+    environment:
+      POSTGRES_DB: auth_db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+
+  auth-service:
+    build:
+      context: ./backend/services/auth-service
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8001"
+    environment:
+      DATABASE_URL: postgresql://user:password@db:5432/auth_db
+      SECRET_KEY: "your_strong_secret_key_for_auth_service"
+    depends_on:
+      - db
+    volumes:
+      - ./backend/services/auth-service/.env:/app/.env # Mount .env for settings
+
+  deepface-service:
+    build:
+      context: ./backend/services/deepface-service
+      dockerfile: Dockerfile # Use Dockerfile.gpu if you have GPU setup
+    ports:
+      - "8002:8002"
+    environment:
+      DEEPFACE_HOME: /app/models/.deepface # Ensure DeepFace downloads to a consistent path
+    volumes:
+      - deepface_models:/app/models/.deepface # Persistent storage for DeepFace models
+      - ./backend/services/deepface-service/.env:/app/.env # Mount .env if you have one
+    depends_on:
+      - auth-service # DeepFace service depends on Auth service for authentication
+    # For GPU:
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [gpu]
+
+volumes:
+  postgres_data:
+  deepface_models: # This volume will store the downloaded DeepFace models

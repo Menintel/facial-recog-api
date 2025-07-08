@@ -42,6 +42,12 @@ MOCK_USERS_DB = {
         email="test@example.com",
         hashed_password=get_password_hash("password123"),
         is_active=True
+    ),
+    "admin": User(
+        id="2",
+        email="admin",
+        hashed_password=get_password_hash("admin"),
+        is_active=True
     )
 }
 

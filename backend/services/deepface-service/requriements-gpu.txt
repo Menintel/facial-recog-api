@@ -1,0 +1,9 @@
+# Same as requirements.txt, but DeepFace might use specific TensorFlow versions
+# Check DeepFace documentation for exact GPU requirements.
+# Example:
+# tensorflow-gpu==2.x.x
+# deepface[tensorflow]
+# If using PyTorch:
+# torch==x.x.x+cu117 # Adjust CUDA version
+# torchvision==x.x.x+cu117
+# deepface[torch]
